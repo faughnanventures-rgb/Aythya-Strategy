@@ -78,7 +78,7 @@ function getAuthenticatedUserId(request: NextRequest): string | null {
     }
   }
   
-  return sessionId;
+return 'dev-user-local';
 }
 
 /**

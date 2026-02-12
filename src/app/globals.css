@@ -1,0 +1,503 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Soft, warm background with cream undertones */
+    --background: 40 33% 98%;
+    --foreground: 30 10% 15%;
+    
+    /* Cards slightly warmer than background */
+    --card: 40 40% 99%;
+    --card-foreground: 30 10% 15%;
+    
+    /* Popovers */
+    --popover: 40 40% 99%;
+    --popover-foreground: 30 10% 15%;
+    
+    /* Primary - muted sage green for calm action */
+    --primary: 120 20% 42%;
+    --primary-foreground: 40 40% 99%;
+    
+    /* Secondary - warm stone */
+    --secondary: 30 8% 92%;
+    --secondary-foreground: 30 10% 25%;
+    
+    /* Muted backgrounds */
+    --muted: 40 20% 94%;
+    --muted-foreground: 30 8% 45%;
+    
+    /* Accent - soft sage highlight */
+    --accent: 120 15% 94%;
+    --accent-foreground: 120 20% 30%;
+    
+    /* Destructive - muted red */
+    --destructive: 0 50% 45%;
+    --destructive-foreground: 40 40% 99%;
+    
+    /* Borders and inputs - very subtle */
+    --border: 40 15% 88%;
+    --input: 40 15% 88%;
+    --ring: 120 20% 50%;
+    
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 30 8% 7%;
+    --foreground: 40 15% 92%;
+    
+    --card: 30 8% 9%;
+    --card-foreground: 40 15% 92%;
+    
+    --popover: 30 8% 9%;
+    --popover-foreground: 40 15% 92%;
+    
+    --primary: 120 18% 45%;
+    --primary-foreground: 30 8% 7%;
+    
+    --secondary: 30 6% 15%;
+    --secondary-foreground: 40 15% 85%;
+    
+    --muted: 30 6% 12%;
+    --muted-foreground: 40 10% 55%;
+    
+    --accent: 120 12% 15%;
+    --accent-foreground: 120 15% 75%;
+    
+    --destructive: 0 45% 40%;
+    --destructive-foreground: 40 15% 92%;
+    
+    --border: 30 6% 15%;
+    --input: 30 6% 15%;
+    --ring: 120 18% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    @apply scroll-smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans text-body;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  }
+  
+  /* Elegant serif headings */
+  h1, h2, h3, h4 {
+    @apply font-display font-medium tracking-tight text-stone-800;
+  }
+  
+  h5, h6 {
+    @apply font-sans font-semibold tracking-tight text-stone-700;
+  }
+  
+  /* Refined selection */
+  ::selection {
+    @apply bg-sage-200/70 text-sage-900;
+  }
+  
+  /* Smooth focus for accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-sage-400/50 ring-offset-2 ring-offset-background;
+    transition: box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  /* Elegant scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-stone-300/60 rounded-full;
+    transition: background-color 0.2s;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-stone-400/70;
+  }
+  
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(168, 162, 158, 0.4) transparent;
+  }
+}
+
+@layer components {
+  /* ============================================
+     CHAT COMPONENTS - Calming conversation UI
+     ============================================ */
+  
+  .chat-container {
+    @apply flex flex-col h-full;
+  }
+  
+  .chat-messages {
+    @apply flex-1 overflow-y-auto px-4 py-6 space-y-6;
+  }
+  
+  .chat-bubble {
+    @apply relative max-w-[85%] px-5 py-4 rounded-2xl;
+    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .chat-bubble-user {
+    @apply ml-auto bg-sage-500 text-white rounded-br-lg shadow-soft-sm;
+  }
+  
+  .chat-bubble-assistant {
+    @apply mr-auto bg-cream-100 text-stone-700 rounded-bl-lg shadow-soft-xs border border-cream-200/50;
+  }
+  
+  .chat-bubble-assistant p {
+    @apply leading-relaxed;
+  }
+  
+  /* Typing indicator - gentle breathing animation */
+  .typing-indicator {
+    @apply flex items-center gap-1.5 px-5 py-4 bg-cream-100 rounded-2xl rounded-bl-lg w-fit;
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .typing-dot {
+    @apply w-2 h-2 bg-stone-400 rounded-full;
+    animation: typing 1.8s ease-in-out infinite;
+  }
+  
+  .typing-dot:nth-child(1) { animation-delay: 0s; }
+  .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+  
+  /* ============================================
+     CARD COMPONENTS - Soft, elevated surfaces
+     ============================================ */
+  
+  .card {
+    @apply bg-card rounded-2xl border border-border/40;
+  }
+  
+  .card-elevated {
+    @apply card shadow-soft p-6 sm:p-8;
+  }
+  
+  .card-interactive {
+    @apply card-elevated cursor-pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .card-interactive:hover {
+    @apply shadow-soft-md border-sage-200;
+    transform: translateY(-2px);
+  }
+  
+  .card-subtle {
+    @apply bg-cream-50/50 rounded-xl p-5 border border-cream-200/30;
+  }
+  
+  /* ============================================
+     BUTTON COMPONENTS - Calm, confident actions
+     ============================================ */
+  
+  .btn {
+    @apply inline-flex items-center justify-center gap-2.5 font-medium;
+    @apply rounded-xl px-5 py-3;
+    @apply transition-all duration-300 ease-smooth;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
+  }
+  
+  .btn-primary {
+    @apply btn bg-sage-500 text-white;
+    @apply hover:bg-sage-600 hover:shadow-soft-sm;
+    @apply active:bg-sage-700 active:scale-[0.98];
+  }
+  
+  .btn-secondary {
+    @apply btn bg-stone-100 text-stone-700 border border-stone-200/60;
+    @apply hover:bg-stone-200/70 hover:border-stone-300/60;
+    @apply active:bg-stone-200 active:scale-[0.98];
+  }
+  
+  .btn-ghost {
+    @apply btn bg-transparent text-stone-600;
+    @apply hover:bg-stone-100/70 hover:text-stone-800;
+    @apply active:bg-stone-200/50;
+  }
+  
+  .btn-outline {
+    @apply btn bg-transparent text-sage-600 border-2 border-sage-300;
+    @apply hover:bg-sage-50 hover:border-sage-400;
+    @apply active:bg-sage-100;
+  }
+  
+  .btn-lg {
+    @apply px-7 py-4 text-body-lg rounded-2xl;
+  }
+  
+  .btn-sm {
+    @apply px-4 py-2 text-body-sm rounded-lg;
+  }
+  
+  /* ============================================
+     INPUT COMPONENTS - Clean, focused inputs
+     ============================================ */
+  
+  .input-base {
+    @apply w-full px-4 py-3.5 bg-white border border-stone-200/70 rounded-xl;
+    @apply text-stone-700 placeholder:text-stone-400;
+    @apply transition-all duration-300 ease-smooth;
+    @apply focus:outline-none focus:border-sage-300 focus:ring-4 focus:ring-sage-100;
+    @apply hover:border-stone-300;
+  }
+  
+  .input-base::placeholder {
+    @apply text-stone-400 font-light;
+  }
+  
+  .input-textarea {
+    @apply input-base resize-none min-h-[52px];
+    field-sizing: content;
+  }
+
+  .chat-input {
+    @apply w-full px-4 py-3 bg-white border border-stone-200 rounded-xl;
+    @apply text-stone-700 placeholder:text-stone-400;
+    @apply focus:outline-none focus:border-sage-300 focus:ring-2 focus:ring-sage-100;
+    @apply transition-all duration-200;
+    min-height: 48px;
+    max-height: 200px;
+  }
+
+  .btn-icon {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center p-0;
+  }
+  
+  .input-label {
+    @apply block text-sm font-medium text-stone-600 mb-2;
+  }
+  
+  /* ============================================
+     PHASE NAVIGATION - Progress indicator
+     ============================================ */
+  
+  .phase-nav {
+    @apply space-y-1;
+  }
+  
+  .phase-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl;
+    @apply transition-all duration-300 ease-smooth;
+    @apply text-left w-full;
+  }
+  
+  .phase-item-current {
+    @apply bg-sage-50 text-sage-700;
+  }
+  
+  .phase-item-completed {
+    @apply text-stone-600 hover:bg-stone-50;
+  }
+  
+  .phase-item-upcoming {
+    @apply text-stone-400 hover:bg-stone-50 hover:text-stone-500;
+  }
+  
+  .phase-indicator {
+    @apply flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center;
+    @apply text-xs font-medium transition-all duration-300;
+  }
+  
+  .phase-indicator-current {
+    @apply bg-sage-500 text-white shadow-glow;
+  }
+  
+  .phase-indicator-completed {
+    @apply bg-sage-100 text-sage-600;
+  }
+  
+  .phase-indicator-upcoming {
+    @apply bg-stone-100 text-stone-400;
+  }
+  
+  /* ============================================
+     PROGRESS BAR - Calm visual progress
+     ============================================ */
+  
+  .progress-bar {
+    @apply h-1 bg-stone-200 rounded-full overflow-hidden;
+  }
+  
+  .progress-bar-fill {
+    @apply h-full bg-sage-400 rounded-full;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  /* ============================================
+     PROSE - Long-form content styling
+     ============================================ */
+  
+  .prose-calm {
+    @apply text-stone-600 leading-relaxed;
+  }
+  
+  .prose-calm h1 {
+    @apply font-display text-display-lg text-stone-800 mb-6;
+  }
+  
+  .prose-calm h2 {
+    @apply font-display text-display-md text-stone-800 mt-12 mb-4;
+  }
+  
+  .prose-calm h3 {
+    @apply font-display text-display-sm text-stone-700 mt-8 mb-3;
+  }
+  
+  .prose-calm p {
+    @apply mb-5 text-body leading-[1.8];
+  }
+  
+  .prose-calm ul {
+    @apply my-5 space-y-2.5;
+  }
+  
+  .prose-calm li {
+    @apply flex items-start gap-3;
+  }
+  
+  .prose-calm li::before {
+    content: '';
+    @apply flex-shrink-0 w-1.5 h-1.5 bg-sage-400 rounded-full mt-2.5;
+  }
+  
+  .prose-calm strong {
+    @apply font-semibold text-stone-700;
+  }
+  
+  .prose-calm blockquote {
+    @apply border-l-2 border-sage-300 pl-5 my-6 text-stone-500 italic;
+  }
+  
+  /* ============================================
+     DECORATIVE ELEMENTS
+     ============================================ */
+  
+  .divider {
+    @apply h-px bg-gradient-to-r from-transparent via-stone-200 to-transparent;
+  }
+  
+  .divider-vertical {
+    @apply w-px bg-gradient-to-b from-transparent via-stone-200 to-transparent;
+  }
+  
+  /* Subtle gradient backgrounds */
+  .bg-gradient-calm {
+    background: linear-gradient(
+      180deg,
+      hsl(40 33% 98%) 0%,
+      hsl(40 25% 96%) 100%
+    );
+  }
+  
+  .bg-gradient-hero {
+    background: 
+      radial-gradient(ellipse at 30% 0%, hsl(120 15% 94% / 0.5) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 100%, hsl(40 30% 94% / 0.5) 0%, transparent 50%),
+      linear-gradient(180deg, hsl(40 33% 98%) 0%, hsl(40 25% 96%) 100%);
+  }
+  
+  /* Subtle noise texture overlay */
+  .texture-subtle::before {
+    content: '';
+    @apply absolute inset-0 pointer-events-none opacity-[0.015];
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@layer utilities {
+  /* Text utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  
+  /* Animation delays for staggered effects */
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+  
+  /* Smooth transitions */
+  .transition-smooth {
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Glass effect for overlays */
+  .glass {
+    @apply bg-white/80 backdrop-blur-md;
+  }
+  
+  .glass-subtle {
+    @apply bg-white/60 backdrop-blur-sm;
+  }
+}
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes typing {
+  0%, 100% { 
+    opacity: 0.3;
+    transform: scale(0.85);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: scale(1);
+  }
+}
